@@ -12,3 +12,7 @@ CREATE TABLE usuarios(
   senha varchar(20) not null unique,
   criadoEm timestamp default CURRENT_TIMESTAMP()
 ) ENGINE=InnoDB;
+
+
+
+
