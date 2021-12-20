@@ -41,7 +41,7 @@ func (u usuarios) Criar(usuario models.Usuario) (uint64, error) {
 func (u usuarios) Buscar(nomeOuNick string) ([]models.Usuario, error) {
 	nomeOuNick = fmt.Sprintf("%%%s%%", nomeOuNick) // %nomeOuNick%
 
-	linhas, erro := u.db.Query(
+	statement, erro := u.db.Query(
 		"select id, nome, nick, email, criadoEm from usuarios where nome LIKE ? or nick LIKE ?",
 		nomeOuNick, nomeOuNick,
 	)
@@ -50,14 +50,14 @@ func (u usuarios) Buscar(nomeOuNick string) ([]models.Usuario, error) {
 		return nil, erro
 	}
 
-	defer linhas.Close()
+	defer statement.Close()
 
 	var usuarios []models.Usuario
 
-	for linhas.Next() {
+	for statement.Next() {
 		var usuario models.Usuario
 
-		if erro = linhas.Scan(
+		if erro = statement.Scan(
 			&usuario.ID,
 			&usuario.Nome,
 			&usuario.Nick,
@@ -75,18 +75,18 @@ func (u usuarios) Buscar(nomeOuNick string) ([]models.Usuario, error) {
 }
 
 func (u usuarios) BuscarPorID(ID uint64) (models.Usuario, error) {
-	linhas, erro := u.db.Query(
+	statement, erro := u.db.Query(
 		"select id, nome, nick, email, criadoEm from usuarios where id = ?",
 		ID,
 	)
 	if erro != nil {
 		return models.Usuario{}, erro
 	}
-	defer linhas.Close()
+	defer statement.Close()
 
 	var usuario models.Usuario
-	if linhas.Next() {
-		if erro = linhas.Scan(
+	if statement.Next() {
+		if erro = statement.Scan(
 			&usuario.ID,
 			&usuario.Nome,
 			&usuario.Nick,
@@ -109,6 +109,22 @@ func (u usuarios) Atualizar(ID uint64, usuario models.Usuario) error {
 	defer statement.Close()
 
 	if _, erro = statement.Exec(usuario.Nome, usuario.Nick, usuario.Email, ID); erro != nil {
+		return erro
+	}
+
+	return nil
+}
+
+func (u usuarios) Deletar(ID uint64) error {
+	statement, erro := u.db.Prepare(
+		"delete from usuarios where id = ?",
+	)
+	if erro != nil {
+		return erro
+	}
+	defer statement.Close()
+
+	if _, erro = statement.Exec(ID); erro != nil {
 		return erro
 	}
 
