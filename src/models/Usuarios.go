@@ -31,21 +31,21 @@ func (u *Usuario) Preparar(etapa string) error {
 
 func (u *Usuario) validar(etapa string) error {
 	if u.Nome == "" {
-		return errors.New("O nome é obrigatório e não pode estar em branco")
+		return errors.New("o nome é obrigatório e não pode estar em branco")
 	}
 	if u.Nick == "" {
-		return errors.New("O nick é obrigatório e não pode estar em branco")
+		return errors.New("o nick é obrigatório e não pode estar em branco")
 	}
 	if u.Email == "" {
-		return errors.New("O e-mail é obrigatório e não pode estar em branco")
+		return errors.New("o e-mail é obrigatório e não pode estar em branco")
 	}
 
 	if erro := checkmail.ValidateFormat(u.Email); erro != nil {
-		return errors.New("O e-mail inseriro é inválido!")
+		return errors.New("o e-mail inseriro é inválido")
 	}
 
 	if etapa == "cadastro" && u.Senha == "" {
-		return errors.New("A senha é obrigatória e não pode estar em branco")
+		return errors.New("a senha é obrigatória e não pode estar em branco")
 	}
 	return nil
 }
