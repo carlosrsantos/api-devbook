@@ -148,3 +148,35 @@ func (u usuarios) BuscarPorEmail(email string) (models.Usuario, error) {
 
 	return usuario, nil
 }
+
+func (u usuarios) Seguir(usuarioID, seguidorID uint64) error {
+	statement, erro := u.db.Prepare(
+		"insert ignore into seguidores (usuario_id, seguidor_id) values (? , ?)",
+	)
+	if erro != nil {
+		return erro
+	}
+	defer statement.Close()
+
+	if _, erro := statement.Exec(usuarioID, seguidorID); erro != nil {
+		return erro
+	}
+
+	return nil
+}
+
+func (u usuarios) DeixarDeSeguir(usuarioID, seguidorID uint64) error {
+	statement, erro := u.db.Prepare(
+		"delete from seguidores where usuario_id = ? and seguidor_id = ?",
+	)
+	if erro != nil {
+		return erro
+	}
+	defer statement.Close()
+
+	if _, erro := statement.Exec(usuarioID, seguidorID); erro != nil {
+		return erro
+	}
+
+	return nil
+}
