@@ -180,3 +180,94 @@ func (u usuarios) DeixarDeSeguir(usuarioID, seguidorID uint64) error {
 
 	return nil
 }
+
+func (u usuarios) BuscarSeguidores(usuarioID uint64) ([]models.Usuario, error) {
+	linhas, erro := u.db.Query(`
+		select u.id, u.nome, u.nick, u.email, u.criadoEm from usuarios u 
+		inner join seguidores s on u.id = s.seguidor_id
+		where s.usuario_id = ?`, usuarioID,
+	)
+	if erro != nil {
+		return nil, erro
+	}
+	defer linhas.Close()
+
+	var usuarios []models.Usuario
+	for linhas.Next() {
+		var usuario models.Usuario
+
+		if erro = linhas.Scan(
+			&usuario.ID,
+			&usuario.Nome,
+			&usuario.Nick,
+			&usuario.Email,
+			&usuario.CriadoEm,
+		); erro != nil {
+			return nil, erro
+		}
+
+		usuarios = append(usuarios, usuario)
+	}
+	return usuarios, nil
+}
+
+func (u usuarios) BuscarSeguindo(usuarioID uint64) ([]models.Usuario, error) {
+	linhas, erro := u.db.Query(`
+		select u.id, u.nome, u.nick, u.email, u.criadoEm from usuarios u 
+		inner join seguidores s on u.id = s.usuario_id
+		where s.seguidor_id = ?`, usuarioID,
+	)
+	if erro != nil {
+		return nil, erro
+	}
+	defer linhas.Close()
+
+	var usuarios []models.Usuario
+	for linhas.Next() {
+		var usuario models.Usuario
+
+		if erro = linhas.Scan(
+			&usuario.ID,
+			&usuario.Nome,
+			&usuario.Nick,
+			&usuario.Email,
+			&usuario.CriadoEm,
+		); erro != nil {
+			return nil, erro
+		}
+
+		usuarios = append(usuarios, usuario)
+	}
+	return usuarios, nil
+}
+
+func (u usuarios) BuscarSenha(usuarioID uint64) (string, error) {
+	linha, erro := u.db.Query("select senha from usuarios where id = ?", usuarioID)
+	if erro != nil {
+		return "", erro
+	}
+	defer linha.Close()
+
+	var usuario models.Usuario
+	if linha.Next() {
+		if erro = linha.Scan(&usuario.Senha); erro != nil {
+			return "", erro
+		}
+	}
+
+	return usuario.Senha, nil
+}
+
+func (u usuarios) AtualizarSenha(usuarioID uint64, senha string) error {
+	statement, erro := u.db.Prepare("update usuarios set senha = ? where id = ?")
+	if erro != nil {
+		return erro
+	}
+	defer statement.Close()
+
+	if _, erro = statement.Exec(senha, usuarioID); erro != nil {
+		return erro
+	}
+
+	return nil
+}
