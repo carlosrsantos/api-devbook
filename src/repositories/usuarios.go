@@ -1,4 +1,4 @@
-package repositorios
+package repositories
 
 import (
 	"api/src/models"
