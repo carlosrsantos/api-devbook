@@ -1,1 +1,6 @@
-.env,.mod, .sum, .exe, .log, .tmp
+.env
+.mod
+.sum
+.exe
+.log
+.tmp
