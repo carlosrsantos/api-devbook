@@ -1,5 +1,13 @@
 # api-devbook
 
+First step: 
+  - Execute the following commands:
+    go mod init api
+    go mod tidy
+
+
+The commands will initialize the project with the correct configuration and download its dependencies.
+
 This repository contains files that build an api to connect for the database and disposes resources for the web app of Devbook social media.
 It was built to learn deep concepts of programming language Go and how working a social media back end
 Remembering that it is a simpla project.
