@@ -1,3 +1,6 @@
 .exe
 .log
 .tmp
+.env
+.mod
+.sum
