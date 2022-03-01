@@ -14,10 +14,15 @@ These commands will initialize the project with the correct configuration and do
 
 Second step:
   - It's necessary that you create a file .env in the root of your project with the following settings:
+
       DB_USUARIO=database_user
+
       DB_SENHA=database_password
+
       DB_NOME=database_name
+
       API_PORT=execution_port_of_your_application
+
       SECRET_KEY=the_secret_key_for_generate_web_token
 
 
