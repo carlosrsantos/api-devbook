@@ -9,8 +9,8 @@ First step:
 The commands will initialize the project with the correct configuration and download its dependencies.
 
 This repository contains files that build an api to connect for the database and disposes resources for the web app of Devbook social media.
-It was built to learn deep concepts of programming language Go and how working a social media back end
-Remembering that it is a simpla project.
+It was built to learn deep concepts of programming language Go and how a social media working at the back end.
+Remembering that it is a simple project, social medias use too much resources to working good.
 
 
 Directory structure:
